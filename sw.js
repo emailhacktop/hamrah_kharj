@@ -1,7 +1,9 @@
 // Service Worker — مسیرها نسبی‌اند تا برنامه هم روی دامنه اصلی، هم روی زیرمسیر
 // (مثل https://user.github.io/repo/) و هم آفلاین درست کار کند.
-const CACHE = 'hka-v2';
-const ASSETS = ['./', './index.html', './app-icon.png', './manifest.webmanifest'];
+// در زمان بیلد، فهرست کامل فایل‌های ساخته‌شده (assets/* و fonts/*) به‌صورت خودکار
+// توسط vite.config.js در ثابت ASSETS تزریق می‌شود تا همه منابع آفلاین در دسترس باشند.
+const CACHE = 'hka-v3';
+const ASSETS = ["./","./index.html","./app-icon.png","./favicon.png","./logo.png","./manifest.webmanifest","./assets/index-BSUbNmeS.css","./assets/index-C46hDyEu.js","./fonts/Vazirmatn-Bold.woff2","./fonts/Vazirmatn-ExtraBold.woff2","./fonts/Vazirmatn-Medium.woff2","./fonts/Vazirmatn-Regular.woff2","./fonts/Vazirmatn-SemiBold.woff2"];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(ASSETS)));
@@ -25,13 +27,19 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     fetch(req)
       .then((res) => {
-        const copy = res.clone();
-        caches.open(CACHE).then((cache) => cache.put(req, copy));
+        if (res && res.ok) {
+          const copy = res.clone();
+          caches.open(CACHE).then((cache) => cache.put(req, copy));
+        }
         return res;
       })
       .catch(() =>
-        // وقتی آفلاین هستیم: اگر مسیر یک «صفحه» بود، پوسته برنامه را بده
-        caches.match(req).then((cached) => cached || caches.match('./index.html'))
+        caches.match(req).then((cached) => {
+          if (cached) return cached;
+          // فقط درخواست‌های باز کردن صفحه به پوسته index.html برمی‌گردند (نه اسکریپت یا فونت)
+          if (req.mode === 'navigate') return caches.match('./index.html');
+          return Response.error();
+        })
       )
   );
 });
