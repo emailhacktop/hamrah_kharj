@@ -3,7 +3,7 @@
 // در زمان بیلد، فهرست کامل فایل‌های ساخته‌شده (assets/* و fonts/*) به‌صورت خودکار
 // توسط vite.config.js در ثابت ASSETS تزریق می‌شود تا همه منابع آفلاین در دسترس باشند.
 const CACHE = 'hka-v3';
-const ASSETS = ["./","./index.html","./app-icon.png","./favicon.png","./logo.png","./manifest.webmanifest","./assets/index-D7LuwpZ8.js","./assets/index-Y83qxB3B.css","./fonts/Vazirmatn-Bold.woff2","./fonts/Vazirmatn-ExtraBold.woff2","./fonts/Vazirmatn-Medium.woff2","./fonts/Vazirmatn-Regular.woff2","./fonts/Vazirmatn-SemiBold.woff2"];
+const ASSETS = ["./","./index.html","./app-icon.png","./favicon.png","./logo.png","./manifest.webmanifest","./assets/index-8G5dCMhP.js","./assets/index-Y83qxB3B.css","./fonts/Vazirmatn-Bold.woff2","./fonts/Vazirmatn-ExtraBold.woff2","./fonts/Vazirmatn-Medium.woff2","./fonts/Vazirmatn-Regular.woff2","./fonts/Vazirmatn-SemiBold.woff2"];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(ASSETS)));
